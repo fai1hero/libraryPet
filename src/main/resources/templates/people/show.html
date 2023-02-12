@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${person.getFullName()}">Person fullname</title>
+</head>
+<body>
+
+<p th:text="${person.getFullName() +  ', ' + person.getEmail()}">VALUE</p>
+
+<div th:if="${books.isEmpty()}">
+    <p>Человек, пока не взял ни 1 книги</p>
+    <a href="/books">Список книг</a>
+</div>
+
+<div th:if="${!books.isEmpty()}">
+    <hr/>
+    <b>Книги, которые взял человек</b>
+    <br/>
+    <table th:each="book : ${books}">
+        <tr>
+            <td>
+                <a th:href="@{/books/{id}(id=${book.getId()})}"
+                   th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getReleaseYear()}"
+                   th:style="${book.isExpired()} ? 'color: red' : 'color: black'">
+                </a>
+                <span
+                        th:text="${book.isExpired()} ? 'Книга просрочена!' : ''"
+                        th:style="${book.isExpired()} ? 'color: red' : 'color: black'">
+                </span>
+            </td>
+        </tr>
+    </table>
+</div>
+<hr/>
+<br/>
+
+<form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+    <input type="submit" value="Редактировать профиль"/>
+</form>
+<br/>
+
+<form th:method="POST" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Удалить профиль"/>
+</form>
+
+</body>
+</html>
